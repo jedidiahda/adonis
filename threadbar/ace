@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+'use strict'
+//Ace is a local version of the adonis global command-line helper.
+/*
+It’s not a huge improvement, but it is an interesting technique to be aware of. Hashbang directives (like this one) 
+can be useful for hiding unnecessary details, such as the
+binary we need to run a script, so that these kinds of stand-alone scripts are easier for
+others to use
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Ace Commands
+|--------------------------------------------------------------------------
+|
+| The ace file is just a regular Javascript file but with no extension. You
+| can call `node ace` followed by the command name and it just works.
+|
+| Also you can use `adonis` followed by the command name, since the adonis
+| global proxy all the ace commands.
+|
+*/
+
+const { Ignitor } = require('@adonisjs/ignitor')
+
+new Ignitor(require('@adonisjs/fold'))
+  .appRoot(__dirname)
+  .fireAce()
+  .catch(console.error)
