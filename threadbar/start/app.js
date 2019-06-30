@@ -31,7 +31,10 @@ const providers = [
 |
 */
 const aceProviders = [
-  '@adonisjs/lucid/providers/MigrationsProvider'
+  '@adonisjs/lucid/providers/MigrationsProvider',
+  '@adonisjs/framework/providers/ViewProvider',
+  __dirname + '/../App/Providers/ViewProvider',
+  '@adonisjs/bodyparser/providers/BodyParserProvider'
 ]
 
 /*

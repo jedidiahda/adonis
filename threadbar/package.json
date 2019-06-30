@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node ace test"
+    "test": "mocha"
   },
   "keywords": [
     "adonisjs",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@adonisjs/ace": "^5.0.8",
     "@adonisjs/auth": "^3.0.7",
-    "@adonisjs/bodyparser": "^2.0.5",
+    "@adonisjs/bodyparser": "^2.0.9",
     "@adonisjs/cors": "^1.0.7",
     "@adonisjs/fold": "^4.0.9",
     "@adonisjs/framework": "^5.0.9",
@@ -27,7 +27,10 @@
     "@adonisjs/session": "^1.0.27",
     "@adonisjs/shield": "^1.0.8"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "mocha": "^6.1.4"
+  },
   "autoload": {
     "App": "./app"
   }
