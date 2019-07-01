@@ -143,3 +143,19 @@ Response.macro('for', function (params, handlers) {
 
     return (handlers.default || function () { })()
 })
+
+Route.get('/add-redirects', async () => {
+    console.log('hi')
+    const created_at = Database.raw('current_timestamp()')
+    await Database.insert({
+        from: 'assertchris',
+        to: 'christopher',
+        created_at,
+    }).into('redirects')
+    await Database.insert({
+        from: 'thetutlage',
+        to: 'harminder',
+        created_at
+    }).into('redirects')
+    return 'done'
+})
