@@ -1,5 +1,9 @@
 'use strict'
 
+const Redirect = use('App/Models/Redirect')
+const Product = use('App/Models/Product')
+const Customer = use('App/Models/Customer')
+
 const redirects = {
     assertchris: 'christopher',
     thetutlage: 'harminder'
@@ -8,8 +12,10 @@ const redirects = {
 const Controller = use(
     'App/Controllers/Http/Controller'
 )
+const Database = use('Database')
 
 class CustomerController extends Controller{
+
     doRegister(context){
         this.showRequestParameters(context)
     }
@@ -44,18 +50,53 @@ class CustomerController extends Controller{
         //return JSON.stringify(request.all())
         this.showRequestParameters(context)
     }
-    showProfile({ params, response, view }){
-        const redirect = redirects[params.customer]
-        if(redirect){
-            return response.route('profile', {
-                customer: redirect
-            })
-        }
-        response.send(
-            view.render('customer/profile',{
-                name: params.customer
-            })
-        )
+    async showProfile({ params, response, view }){
+        // const rows = await Database.select(
+        //     'from',
+        //     'to'
+        // ).from('redirects')
+        const rows = await Redirect.all()
+        // const redirects = rows.reduce((accumulator, row) => {
+        //     accumulator[row.from] = row.to 
+        //     return accumulator
+        // }, {})
+        const redirects = Array.from(rows).reduce((accumulator, row) => {
+            accumulator[row.from] = row.to 
+            return accumulator
+        }, {})
+
+
+        // const redirect = redirects[params.customer]
+        // if(redirect){
+        //     return response.route('profile', {
+        //         customer: redirect
+        //     })
+        // }
+
+        // const customer = await Database.select('*')
+        //             .from('customers')
+        //             .where('nickname', params.customer)
+        //             .first()
+        const customer = await Customer.query().where('nickname', params.customer).first()
+        // if(!customer){
+        //     return view.render('oops', {
+        //         type: 'PROFILE_MISSING'
+        //     })
+        // }
+
+        // const products = await Database.select('*')
+        //     .from('products')
+        //     .where('customer_id', customer.id)
+        //const products = await Product.query().where('customer_id', customer.id)
+        const products = await customer.products()
+        // return view.render('customer/profile',{
+        //     customer,
+        //     products
+        // })
+        return view.render('customer/profile',{
+            customer,
+            products
+        })
     }
     updateProfile({ params }){
         return 'PUT /:customer ' + params.customer

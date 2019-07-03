@@ -20,6 +20,7 @@ const providers = [
   '@adonisjs/session/providers/SessionProvider',
   '@adonisjs/auth/providers/AuthProvider',
   "@adonisjs/lucid/providers/LucidProvider",
+  __dirname + '/../App/Providers/ViewProvider',
 ]
 
 /*
@@ -33,10 +34,8 @@ const providers = [
 */
 const aceProviders = [
   '@adonisjs/lucid/providers/MigrationsProvider',
-  '@adonisjs/framework/providers/ViewProvider',
-  __dirname + '/../App/Providers/ViewProvider',
+  '@adonisjs/framework/providers/ViewProvider',  
   '@adonisjs/bodyparser/providers/BodyParserProvider',
-  "@adonisjs/lucid/providers/MigrationsProvider",
 ]
 
 /*
