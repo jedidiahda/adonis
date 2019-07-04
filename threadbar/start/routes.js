@@ -47,16 +47,16 @@ Route.get('/login','CustomerController.showLogin')
 Route.post('/login','CustomerController.doLogin')
 Route.put('/logout', 'CustomerController.logout')
 Route.get('/register', 'CustomerController.showRegister')
-Route.post('/register','CustomerController.doRegister')
-// Route.post('/register', ({ request, response }) => {
-//     //return JSON.stringify(request.all())
-//     response.safeHeader(
-//         'content-type',
-//         'application/json'
-//     )
+//Route.post('/register','CustomerController.doRegister')
+Route.post('/register', ({ request, response }) => {
+    //return JSON.stringify(request.all())
+    response.safeHeader(
+        'content-type',
+        'application/json'
+    )
 
-//     response.send(JSON.stringify(request.all()))
-// })
+    response.send(JSON.stringify(request.all()))
+}).as('customer.register')
 
 Route.get('/forgot-password','CustomerController.showForgotPassword')
 Route.post('/forgot-password','CustomerController.doForgotPassword')

@@ -3,6 +3,7 @@
 const Redirect = use('App/Models/Redirect')
 const Product = use('App/Models/Product')
 const Customer = use('App/Models/Customer')
+const Hash = use('Hash')
 
 const redirects = {
     assertchris: 'christopher',
@@ -22,8 +23,17 @@ class CustomerController extends Controller{
     showLogin({ view }){
         return view.render('customer/login')
     }
-    doLogin(){
-        return 'POST /login'
+    async doLogin(){
+        //return 'POST /login'
+        const email = request.input('email')
+        const password = request.input('password')
+        const customer = await Customer.findByOrFail('email',email)
+        const matches = await Hash.verify(password, customer.password)
+        if(matches){
+            return 'valid'
+        }else{
+            return 'invalid'
+        }
     }
     logout(){
         return 'PUT /logout'
@@ -31,8 +41,27 @@ class CustomerController extends Controller{
     showRegister({ view }){
         return view.render('customer/register')
     }
-    doRegister({ request, response}){
+    async doRegister({ request, response}){
+        // const customer = await Customer.create(
+        //     request.only([
+        //         'first_name',
+        //         'last_name',
+        //         'email',
+        //         'password',
+        //         'nickname'
+        //     ]),
+        // )
+
+        // const customer = new Customer()
+        // customer.first_name = request.input('first_name')
+        // customer.last_name = request.input('last_name')
+        // customer.email = request.input('email')
+        // customer.password = request.input('password')
+        // customer.nickname = request.input('nickname')
+        // await customer.save()
+        console.log(request.all())
         response.json(request.all())
+        //return 'done'
     }
     showForgotPassword({ view }){
         return view.render('customer/forgot-password')
