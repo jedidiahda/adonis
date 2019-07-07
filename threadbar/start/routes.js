@@ -56,7 +56,7 @@ Route.post('/register', ({ request, response }) => {
     )
 
     response.send(JSON.stringify(request.all()))
-}).as('customer.register')
+})
 
 Route.get('/forgot-password','CustomerController.showForgotPassword')
 Route.post('/forgot-password','CustomerController.doForgotPassword')
