@@ -58,20 +58,36 @@ class AuthController {
     /**
      * Handle user authentication
      */
-    async login({ request, response}){
+    async login({ auth, request, response, session}){
         const email = request.input('email')
         const password = request.input('password')
 
         try{
-            await request.auth.attemp(email, password)
+            await auth.attempt(email, password)
+            console.log(result)
+            //session.withErrors({ error: 'Invalid credentials'}).flashAll()
             response.redirect('/')
         }catch(e){
-            await request.with({ error: 'Invalid credentials'}).flash()
-
+            //await session.withErrors({ error: 'Invalid credentials'}).flash()
+            session.withErrors({ error: 'Invalid credentials'}).flashAll()
             //redirect back with error
             response.redirect('back')
         }
+
+ 
     }
+
+    /**
+     * Logout authenticated user
+     */
+    async logout({ auth, request, response }) {
+        // logouts the user
+        await auth.logout()
+
+        // redirect to login page
+        response.redirect('/login')
+    }
+
 }
 
 module.exports = AuthController
