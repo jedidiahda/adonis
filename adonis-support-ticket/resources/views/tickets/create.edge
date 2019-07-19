@@ -1,0 +1,75 @@
+@layout('master')
+@section('title')
+Open Ticket
+@endsection
+
+@section('content')
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">Open New Ticket</div>
+
+                <div class="panel-body">
+                    @include('includes.status')
+                    @include('includes.errors')
+
+                    <form method="POST" action="new_ticket" class="form-horizontal">
+                        {{ csrfField() }}
+                        <div class="form-group">
+                            <div class="col-md-4 control-label">
+                                <label for="title">Title</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" name="title" id="title" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 control-label">
+                                <label for="category">Category</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select name="category" id="category"  class="form-control">
+                                    <option value="">Select category</option>
+                                    @each((item,i) in categories)                                   
+                                <option value="{{i}}">{{ item }}</option>
+                                    @endeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                                <div class="col-md-4 control-label">
+                                        <label for="priority">Priority</label>
+                                    </div>
+                                <div class="col-md-6">
+                                     <select name="priority" id="priority"  class="form-control">
+                                            <option value="">Select priority</option>
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <div class="col-md-4 control-label">
+                                            <label for="message">Message</label>
+                                        </div>
+                                    <div class="col-md-6">
+                                        <input type="textarea" name="message" id="message" rows="10" class="form-control"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <div class="col-md-6 col-md-offset-4">
+                                            <button class="btn btn-primary">Open Ticket</button>
+                                        </div>
+                                    </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

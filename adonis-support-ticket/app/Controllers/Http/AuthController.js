@@ -42,7 +42,7 @@ class AuthController {
             })
 
             //login the user
-            await request.auth.login(user)
+            await auth.login(user)
             console.log('pass')
             //redirect to homepage
             response.redirect('/')
@@ -59,19 +59,29 @@ class AuthController {
      * Handle user authentication
      */
     async login({ auth, request, response, session}){
-        const email = request.input('email')
-        const password = request.input('password')
+        const { email, password } = request.all()
+       
+        const validation = await validate(request.all(), {            
+            email:'required|email',
+            password:'required'
+        })
 
+        if(validation.fails()){
+            console.log('fail', validation)
+            session.withErrors(validation.messages()).flashExcept(['password'])
+            return response.redirect('back')
+        }
         try{
             await auth.attempt(email, password)
             console.log(result)
             //session.withErrors({ error: 'Invalid credentials'}).flashAll()
-            response.redirect('/')
+            return response.redirect('/new_ticket')
         }catch(e){
             //await session.withErrors({ error: 'Invalid credentials'}).flash()
             session.withErrors({ error: 'Invalid credentials'}).flashAll()
+            console.log(e)
             //redirect back with error
-            response.redirect('back')
+            return response.redirect('back')
         }
 
  

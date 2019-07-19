@@ -10,11 +10,8 @@
                     <div class="panel-heading">Login</div>
                     <div class="panel-body">
 
-                        @if(old('error'))
-                            <div class="alert alert-danger">
-                                {{ old('error') }}
-                            </div>
-                        @endif
+                     
+                        @include('includes.errors')
                         <form action="/login" method="post" class="form-horizontal">
                             {{ csrfField() }}
                             <div class="form-group">
