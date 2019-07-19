@@ -62,7 +62,7 @@ class AuthController {
         const { email, password } = request.all()
        
         const validation = await validate(request.all(), {            
-            email:'required|email',
+            email:'required',
             password:'required'
         })
 
@@ -73,8 +73,8 @@ class AuthController {
         }
         try{
             await auth.attempt(email, password)
-            console.log(result)
-            //session.withErrors({ error: 'Invalid credentials'}).flashAll()
+            
+            session.flash({ error: 'Invalid credentials'})
             return response.redirect('/new_ticket')
         }catch(e){
             //await session.withErrors({ error: 'Invalid credentials'}).flash()

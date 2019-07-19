@@ -12,18 +12,8 @@ class TicketController {
     /**
      * Show the form for opening a new ticket.
      */
-    async create({ view, request, response, auth }) {
+    async create({ view, request, response }) {
         const categories = await Category.pair('id', 'name')
-        //console.log(auth.user)
-        const user = auth.user
-
-   
-
-          await Mail.raw('plain text email', (message) => {
-            message.from('jedidiahda@hotmail.com')
-            message.to('y_uguest@yahoo.co.uk')
-          })
-
         return view.render('tickets.create', {categories: categories})
     }
 
@@ -40,17 +30,7 @@ class TicketController {
             return response.redirect('back')
         }
 
-        // const ticket = await Ticket.create({
-        //     title: request.input('title'),
-        //     user_id: user.id,
-        //     ticket_id: RandomString.generate({ length: 10, capitalization: 'uppercase'}),
-        //     category_id: request.input('category'),
-        //     priority: request.input('priority'),
-        //     message: request.input('message'),
-        //     status: 'open',
-        // })
-
-        const ticket = {
+        const ticket = await Ticket.create({
             title: request.input('title'),
             user_id: user.id,
             ticket_id: RandomString.generate({ length: 10, capitalization: 'uppercase'}),
@@ -58,22 +38,40 @@ class TicketController {
             priority: request.input('priority'),
             message: request.input('message'),
             status: 'open',
-        }
+        })
 
-
-
-          
+        // const ticket = {
+        //     title: request.input('title'),
+        //     user_id: user.id,
+        //     ticket_id: RandomString.generate({ length: 10, capitalization: 'uppercase'}),
+        //     category_id: request.input('category'),
+        //     priority: request.input('priority'),
+        //     message: request.input('message'),
+        //     status: 'open',
+        // }
 
         // await Mail.send('emails.ticket_info', {}, (message) => {
         //     message.to(user.email, user.username)
         //     message.from('jedidiahda@gmail.com')
         //     message.subject(`[Ticket ID: ${ticket.ticket_id}] ${ticket.title}`)
         // })
-        await request.with({ status: `A ticket with ID: #${ticket.ticket_id} has been opened.`}).falsh()
-        response.redirect('back')
+        await session.flash({ status: `A ticket with ID: #${ticket.ticket_id} has been opened.`})
+        return response.redirect('back')
     }
 
+    /**
+    * Display all tickets by a user.
+    */
+    async userTickets({ request, response, auth,view }) {
+        // Get all the tickets created by the currently authenticated user
+        //console.log(auth)
+        const tickets = await Ticket.query().where('user_id', auth.user.id).fetch()
+        // Get all categories
+        const categories = await Category.all()
 
+
+        return view.render('tickets.user_tickets', { tickets: tickets.toJSON(), categories: categories.toJSON() })
+    }
 
 }
 
