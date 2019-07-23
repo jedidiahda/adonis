@@ -1,0 +1,65 @@
+@layout('master')
+@section('title')
+{{ ticket.title }}
+@endsection
+
+@section('content')
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    #{{ ticket.ticket_id }} - {{ ticket.title }}
+                </div>
+
+                <div class="panel-body">
+                    @include('includes.status')
+                    @include('includes.errors')
+
+                    <div class="ticket-info">
+                        <p>{{ ticket.message }}</p>
+                        <p>Categry: {{ category.name }}</p>
+                        <p>
+                            @if(ticket.status == 'open')
+                                Status: <span class="label label-success">{{ ticket.status }}</span>
+                            @else
+                                Status: <span class="label label-danger">{{ ticket.status }}</span>
+                            @endif
+                        </p>
+                        <p>Created on: {{ ticket.created_at }}</p>
+                    </div>
+
+                    <hr>
+
+                    <div class="comments">
+                        @each(comment in comments)
+                            <div class="panel panel-{{  ticket.user.id == comment.user_id ? "default" : "success" }}">
+                                <div class="panel panel-heading">
+                                    {{ comment.user.username }}
+                                    <span class="pull-right">{{ comment.created_at }}</span>
+                                </div>
+                    
+                                <div class="panel panel-body">
+                                    {{ comment.comment }}
+                                </div>
+                            </div>
+                        @endeach
+                    </div>
+
+
+                    <div class="comment-form">
+                        <form class="form" method="POST" action="/comment">
+                            {{ csrfField() }}
+                            <input type="hidden" value={{ ticket.id }} name="ticket_id"/>
+                            <div class="form-group">
+                                <textarea rows="5" cols="20" name="comment" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type ="submit" class="btn btn-primary"/>
+                            </div>
+                        </form>                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

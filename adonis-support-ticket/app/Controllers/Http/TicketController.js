@@ -73,6 +73,67 @@ class TicketController {
         return view.render('tickets.user_tickets', { tickets: tickets.toJSON(), categories: categories.toJSON() })
     }
 
+    /**
+    * Display a specified ticket.
+    */
+    async show({ request, response, view, params }) {
+        // Get the ticket with the user that created it
+        const ticket = await Ticket.query()
+                                .where('ticket_id', params.ticket_id)
+                                .with('user')
+                                .firstOrFail()
+        // Get the ticket category
+        const comments = await ticket.comments().with('user').fetch()
+        const category = await ticket.category().fetch()
+
+        return view.render('tickets.show', {
+            ticket: ticket.toJSON(),
+            comments: comments.toJSON(),
+            category: category.toJSON()
+        })
+    }
+
+    /**
+    * Display all tickets.
+    */
+    async index({ request, response, view }) {
+        // Get all tickets
+        const tickets = await Ticket.all()
+        // Get all categories
+        const categories = await Category.all()
+
+        return view.render('tickets.index', {
+            tickets: tickets.toJSON(),
+            categories: categories.toJSON()
+        })
+    }
+
+    /**
+    * Close the specified ticket.
+    */
+    async close({request, response, session, params}) {
+        // Get the ticket with the specified ticket_id
+        const ticket = await Ticket.query()
+                                .where('ticket_id', params.ticket_id)
+                                .firstOrFail()
+        // Change the ticket status to closed
+        ticket.status = 'Closed'
+        // Persist to database
+        await ticket.save()
+
+        // Get the user that created the ticket
+        const ticketOwner = await ticket.user().fetch()
+
+        // send email
+        // await Mail.send('emails.ticket_status', { ticketOwner, ticket }, (message) => {
+        //     message.to(ticketOwner.email, ticketOwner.username)
+        //     message.from('support@adonissupport.dev')
+        //     message.subject(`RE: ${ticket.title} (Ticket ID: ${ticket.ticket_id})`)
+        // })
+
+        await session.flash({ status: 'The ticket has been closed.' })
+        return response.redirect('back')
+    }
 }
 
 module.exports = TicketController

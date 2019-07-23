@@ -45,6 +45,20 @@ class User extends Model {
       password:'required|confirmed|min:6'
     }
   }
+  /**
+  * A user can have many tickets
+  */
+  tickets() {
+    return this.hasMany('App/Models/Ticket')
+  }
+
+  /**
+  * A user can have many comments
+  */
+  comments() {
+    return this.hasMany('App/Models/Comment')
+  }
+
 }
 
 module.exports = User
