@@ -47,22 +47,13 @@ Route.get('/login','CustomerController.showLogin')
 Route.post('/login','CustomerController.doLogin')
 Route.put('/logout', 'CustomerController.logout')
 Route.get('/register', 'CustomerController.showRegister')
-//Route.post('/register','CustomerController.doRegister')
-Route.post('/register', ({ request, response }) => {
-    //return JSON.stringify(request.all())
-    response.safeHeader(
-        'content-type',
-        'application/json'
-    )
+Route.post('/register','CustomerController.showForgotPassword')
 
-    response.send(JSON.stringify(request.all()))
-})
-
-Route.get('/forgot-password','CustomerController.showForgotPassword')
-Route.post('/forgot-password','CustomerController.doForgotPassword')
-Route.get('/reset-password/:token','CustomerController.showResetPassword')
-Route.patch('/reset-password/:token','CustomerController.doResetPassword')
-Route.get('/:customer', 'CustomerController.showProfile').as('profile')
+// Route.get('/forgot-password','CustomerController.showForgotPassword')
+// Route.post('/forgot-password','CustomerController.doForgotPassword')
+// Route.get('/reset-password/:token','CustomerController.showResetPassword')
+// Route.patch('/reset-password/:token','CustomerController.doResetPassword')
+// Route.get('/:customer', 'CustomerController.showProfile').as('profile')
 // Route.get('/:customer', ({ response, view, params }) => {
 //     // view.render('user/profile', {
 //     //     name: params.customer,
@@ -81,81 +72,81 @@ Route.get('/:customer', 'CustomerController.showProfile').as('profile')
 //     )
 // }).as('profile')
 
-Route.put('/:customer', 'CustomerController.updateProfile')
-Route.delete('/:customer','CustomerController.deleteProfile')
+// Route.put('/:customer', 'CustomerController.updateProfile')
+// Route.delete('/:customer','CustomerController.deleteProfile')
 
-Route.get('/:customer/products', ({ params, response }) => {
-    const products = [
-        { price: 4.1, title: "coca colar" },
-    ]
+// Route.get('/:customer/products', ({ params, response }) => {
+//     const products = [
+//         { price: 4.1, title: "coca colar" },
+//     ]
 
-    return response.for(params, {
-        xml: () => [
-            {
-                product: products.map(product => ({
-                    "@": { price: product.price },
-                    "#": product.title,
-                })),
-            },
-            "products",
-        ],
-        json: () => [
-            {
-                products,
-            },
-        ],
-        default: () => "...render normal view",
-    })
-}).formats(['xml', 'json'])
+//     return response.for(params, {
+//         xml: () => [
+//             {
+//                 product: products.map(product => ({
+//                     "@": { price: product.price },
+//                     "#": product.title,
+//                 })),
+//             },
+//             "products",
+//         ],
+//         json: () => [
+//             {
+//                 products,
+//             },
+//         ],
+//         default: () => "...render normal view",
+//     })
+// }).formats(['xml', 'json'])
 
-Route.post('/:customer/products', ({ params }) => {
-    return ('POST /:customer/products ' + params.customer)
-}
-)
+// Route.post('/:customer/products', ({ params }) => {
+//     return ('POST /:customer/products ' + params.customer)
+// }
+// )
 
-Route.get('/:customer/:product', ({ params }) => {
-    return (
-        'GET /:customer/:product ' + params.customer + ' ' + params.product
-    )
-})
+// Route.get('/:customer/:product', ({ params }) => {
+//     return (
+//         'GET /:customer/:product ' + params.customer + ' ' + params.product
+//     )
+// })
 
-Route.put('/:customer/:product', ({ params }) => {
-    retunr('PUT /:customer/:product ' + params.customer + ' ' + params.product)
-})
+// Route.put('/:customer/:product', ({ params }) => {
+//     retunr('PUT /:customer/:product ' + params.customer + ' ' + params.product)
+// })
 
-Route.delete('/:customer/:product', ({ params }) => {
-    return ('DELETE /:customer/:product ' + params.customer + ' ' + params.product)
-})
+// Route.delete('/:customer/:product', ({ params }) => {
+//     return ('DELETE /:customer/:product ' + params.customer + ' ' + params.product)
+// })
 
-Response.macro('for', function (params, handlers) {
-    if (params.format === '.xml') {
-        const handler = handlers.xml
-        const data = handler()
+// Response.macro('for', function (params, handlers) {
+//     if (params.format === '.xml') {
+//         const handler = handlers.xml
+//         const data = handler()
 
-        return this.xml(...data)
-    }
+//         return this.xml(...data)
+//     }
 
-    if (params.format === '.json') {
-        const handler = handlers.json
-        const data = handler()
-        return this.json(...data)
-    }
+//     if (params.format === '.json') {
+//         const handler = handlers.json
+//         const data = handler()
+//         return this.json(...data)
+//     }
 
-    return (handlers.default || function () { })()
-})
+//     return (handlers.default || function () { })()
+// })
 
-Route.get('/add-redirects', async () => {
-    console.log('hi')
-    const created_at = Database.raw('current_timestamp()')
-    await Database.insert({
-        from: 'assertchris',
-        to: 'christopher',
-        created_at,
-    }).into('redirects')
-    await Database.insert({
-        from: 'thetutlage',
-        to: 'harminder',
-        created_at
-    }).into('redirects')
-    return 'done'
-})
+// Route.get('/add-redirects', async () => {
+//     console.log('hi')
+//     const created_at = Database.raw('current_timestamp()')
+//     await Database.insert({
+//         from: 'assertchris',
+//         to: 'christopher',
+//         created_at,
+//     }).into('redirects')
+//     await Database.insert({
+//         from: 'thetutlage',
+//         to: 'harminder',
+//         created_at
+//     }).into('redirects')
+//     return 'done'
+// })

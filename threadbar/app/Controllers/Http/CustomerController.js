@@ -17,9 +17,9 @@ const Database = use('Database')
 
 class CustomerController extends Controller{
 
-    doRegister(context){
-        this.showRequestParameters(context)
-    }
+    // doRegister(context){
+    //     this.showRequestParameters(context)
+    // }
     showLogin({ view }){
         return view.render('customer/login')
     }
@@ -62,6 +62,8 @@ class CustomerController extends Controller{
         console.log(request.all())
         response.json(request.all())
         //return 'done'
+        //  return view.send('customer/reset-password')
+        response.redirect('/')
     }
     showForgotPassword({ view }){
         return view.render('customer/forgot-password')
