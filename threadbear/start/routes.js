@@ -16,6 +16,12 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
+const redirects = {
+    assertchris: "christopher",
+    thetutlage: "harminder",
+}
+
+
 //Route.on('/').render('welcome')
 
 Route.get("/", ({ view }) => {
@@ -48,7 +54,12 @@ Route.get("/register", () => {
 
 Route.post("/register", () => {
     // create new customer profile
-    return "POST /register"
+    //return "POST /register"
+    response.safeHeader(
+        "content-type",
+        "application/json",
+    )
+    response.send(JSON.stringify(request.all()))
 })
 
 Route.get("/forgot-password", () => {
@@ -87,11 +98,24 @@ Route.patch(
 
 //** Customer */
 
-Route.get("/:customer", ({ view, params }) =>
-    view.render("user/profile", {
-        name: params.customer,
-    }),
-)
+Route.get("/:customer", ({ response, view, params }) => {
+    const redirect = redirects[params.customer]
+
+
+    if (redirect) {
+        return response.route("profile", {
+            customer: redirect,
+        })
+    }
+}).as("profile")
+
+
+// Route.get("/:customer", ({ view, params }) =>
+//     view.render("user/profile", {
+//         name: params.customer,
+//     }),
+// )
+
 
 Route.put("/:customer", ({ params }) => {
     // update customer profile
